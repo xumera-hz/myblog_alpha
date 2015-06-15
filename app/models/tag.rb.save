@@ -1,0 +1,5 @@
+class Tag
+  include Mongoid::Document
+  field :, type: String
+  belongs_to :article
+end

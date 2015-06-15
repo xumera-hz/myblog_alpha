@@ -1,0 +1,20 @@
+<div class="container">
+<h2><p><%= @article.title %></p></h2>
+<br><br>
+<table class="table">
+ <thead>
+ </thead>
+ <tbody>
+  <tr><td><%= @article.text %><br><br><br>
+  <p><%= render @article.tags %></p>
+  <%= link_to 'Улучшить', edit_article_path(@article), :class => "btn btn-warning btn-sm" %>
+  <%= link_to 'Уничтожить', article_path(@article), :class => "btn btn-danger btn-sm", method: :delete, data: { confirm: 'Вы уверены?' } %></td></tr>
+  <tr><td>Восхищения сторонников:<br><br>
+  <%= render @article.comments %></td></tr>
+  <tr><td>Добавить восхищение:<br>
+  <%= render 'comments/form'  %></td></tr>
+</tbody>
+</table>
+<%= link_to 'Назад', articles_path, :class => "btn btn-primary btn-md" %>
+<br><br>
+</div>

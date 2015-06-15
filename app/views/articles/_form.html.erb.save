@@ -1,0 +1,83 @@
+<%= form_for @article do |f| %>
+ 
+  <% if @article.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@article.errors.count, "error") %> в твоем безупречном плане:
+      </h2>
+      <ul>
+        <% @article.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+ 
+ <table>
+  <tbody>
+   <tr>
+    <td><%= f.label 'Идея', :style => 'width: 45px' %>
+    <%= f.text_field :title, :style => 'width: 600px' %></td>
+   </tr>  
+   <tr>
+    <td><br>
+    <%= f.label 'Инструкции' %><br>
+    <%= f.text_area :text, :rows => '15', :cols => '90', :style => 'resize: none' %>
+    </td>
+   </tr>
+   <tr>
+    <td><br>
+     <label id="list_tags"></label><br>
+     <%= fields_for :tag do |f2| %>
+     <%= f2.label 'Метки' %>
+     <%= f2.text_field :name, :id => 'add_tag' %>
+     <span class="btn btn-defaults" onclick="AddTag()">Добавить</span>
+     <% end %>
+    </td>
+   </tr>
+ </tbody>
+</table>
+<br>
+ <%= f.submit 'Утвердить', :class => 'btn btn-success btn-lg' %>
+<% end %>
+<br>
+<script>
+var tag_class = "bt btn-info btn-sm";
+var del_class = "glyphicon glyphicon-remove-sign";
+var seps = [' ',',',';'];
+
+
+function CreateTags(list){
+var tags=[];
+for(var i=0;i<seps.length;i++)
+  tags = list.split(seps[i]);
+}
+function AddTag(){
+var tt = 'aa,bb cc;tt';
+var vv = [];
+var nn = "pp=t_y_u;jj=q_w_e;bb=z_x_c";
+var reg = "";
+var hh = /([^;]*)/;
+for(var i=0;i<seps.length;i++) reg=reg+seps[i];
+var mm = tt.match(new RegExp("([^"+reg+"]*)","g"));
+var yy = nn.match();
+alert('|'+yy+'|');
+ 
+var tag = document.getElementById("add_tag");
+var list_tags = tag.value;
+var tags = list_tags.split(",");
+var inner1 = "<label id=\""+"temp_tag_";
+var inner2 = "\" class=\""+tag_class+"\">";
+var inner3 = "<a class=\""+del_class+"\" onclick=\"RemoveTag(";
+var inner4 = ");\"></a></label>";
+var inner = inner1+0+inner2+tags[0]+" "+inner3+0+inner4;
+if(tags.length > 1)
+  for(var i=1;i<tags.length;i++)
+    inner = inner+" "+ inner1+i+inner2+tags[i]+" "+inner3+i+inner4;
+document.getElementById("list_tags").innerHTML = inner;
+}
+function RemoveTag(num){
+var elem = document.getElementById("temp_tag_"+num);
+elem.parentNode.removeChild(elem);
+}
+</script>

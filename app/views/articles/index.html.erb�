@@ -1,0 +1,20 @@
+<div class="container">
+<h1>Блог Саурона</h1>
+<%= link_to 'Новая тема', new_article_path %>
+
+<table class="table">
+<thead>
+  <tr>
+  </tr>
+</thead>
+ <tbody>
+  <% @articles.each do |article| %>
+    <tr>
+      <td><%= link_to article.title, article_path(article) %><br>
+      <%= article.text %></td>
+    </tr>
+  <% end %>
+</tbody>
+</table>
+
+</div>

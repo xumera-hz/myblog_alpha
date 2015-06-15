@@ -1,0 +1,53 @@
+<%= form_for @article do |f| %>
+ 
+  <% if @article.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@article.errors.count, "error") %> в твоем безупречном плане:
+      </h2>
+      <ul>
+        <% @article.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+ 
+ <table>
+  <tbody>
+   <tr>
+    <td><%= f.label 'Идея', :style => 'width: 45px' %>
+    <%= f.text_field :title, :style => 'width: 600px' %></td>
+   </tr>  
+   <tr>
+    <td><br>
+    <%= f.label 'Инструкции' %><br>
+    <%= f.text_area :text, :rows => '15', :cols => '90', :style => 'resize: none' %>
+    </td>
+   </tr>
+   <tr>
+    <td><br>
+     <a id="list_tags"></a><br>
+     <%= fields_for :tag do |f2| %>
+     <%= f2.label 'Метки' %>
+     <%= f2.text_field :name, :id => 'add_tag' %>
+     <a class="btn btn-defaults" onclick="AddTag()">Добавить</a>
+     <% end %>
+    </td>
+   </tr>
+ </tbody>
+</table>
+<br>
+ <%= f.submit 'Утвердить', :class => 'btn btn-success btn-lg' %> <% end %> <br> <script> var tag_class = "bt btn-info btn-sm" var del_class = "glyphicon 
+glyphicon-remove-sign" function AddTag(){ var tag = document.getElementById("add_tag"); var list_tags = tag.value; var tags = list_tags.split(","); var i; var 
+inner1 = "<label id=\""+"temp_tag_"; var inner2 = "\" class=\""+tag_class+"\">"; var inner3 = "<p type=\"button\" class=\""+del_class+"\" onclick=\"RemoveTag("; 
+var inner4 = ")\"></p></label>"; var inner = inner1+0+inner2+tags[0]+" "+inner3+0+inner4; if(tags.length > 1)
+  for(i=1;i<tags.length;i++)
+    inner = inner + inner1+i+inner2+tags[i]+" "+inner3+i+inner4;
+document.getElementById("list_tags").innerHTML = inner;
+}
+function RemoveTag(num){
+var elem = document.getElementById("temp_tag_"+num);
+elem.parentNode.removeChild(elem);
+}
+</script>

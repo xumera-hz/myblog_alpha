@@ -1,0 +1,131 @@
+
+<%= form_for @new_article do |f| %>
+  <% if @new_article.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@new_article.errors.count, "error") %> Косячим, да?
+      </h2>
+      <ul>
+        <% @new_article.errors.full_messages.each do |msg| %>
+          <li style="color:#ff0000"><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+ 
+ <table>
+  <tbody>
+   <tr>
+    <td><%= f.label 'Идея', :style => 'width: 45px' %>
+    <%= f.text_field :title, :style => 'width: 600px' %></td>
+   </tr>  
+   <tr>
+    <td><br>
+    <%= f.label 'Инструкции' %><br>
+    <%= f.text_area :text, :rows => '15', :cols => '90', :style => 'resize: none' %>
+    </td>
+   </tr>
+   <tr>
+    <td><br>
+     <label id="list_tags"></label><br>
+     <%= f.label 'Метки' %>
+     <%= fields_for :tag do |f2| %>
+     <%= f2.hidden_field :name, :id =>"post_tags", :value => @temp2 %>
+     <%= f.hidden_field :count_tags, :id =>"post_count" %>
+     <% end %>
+     <input type="text" id="add_tag">
+     <button type="button" class="btn btn-default" onclick="AddTag()">Добавить</button>
+    </td>
+   </tr>
+ </tbody>
+</table>
+<br>
+ <%= f.submit 'Утвердить', :class => "btn btn-success btn-lg" %>
+<% end %>
+<br>
+<script>
+var tag_class = "bt btn-info btn-sm";
+var del_class = "glyphicon glyphicon-remove-sign";
+var seps = [' ',',',';'];
+var tags_id_inner = [];
+var tags_list = document.getElementById("post_tags").value;
+var tags_list_arr = getTags(tags_list);
+if(tags_list.length>0) RenderTags(tags_list_arr,0);
+function getTags(list){
+var tags=[];
+var reg = "";
+for(var i=0;i<seps.length;i++) reg=reg+seps[i];
+var arr_list = list.match(new RegExp("([^"+reg+"]*)","g"));
+for(var i=0;i<arr_list.length;i++) 
+  if (arr_list[i]!='') tags = tags.concat(arr_list[i]);
+tags = SetupDistinct(tags);
+return tags;
+}
+function SetupDistinct(tags){
+for(var i=0;i<tags.length;i++)
+  for(var j=i+1;j<tags.length;j++)
+    if(tags[i]==tags[j]) tags.splice(j,1);
+return tags;
+}
+function SetupNewTags(tags,new_tags){
+var temp_tags = [];
+var flag=0;
+if(tags.length==0)
+  for(var i=0;i<new_tags.length;i++)
+    temp_tags=temp_tags.concat(new_tags[i]);
+else
+  for(var i=0;i<new_tags.length;i++){
+    flag=1;
+    for(var j=0;j<tags.length;j++)
+      if(new_tags[i]==tags[j]) flag=0;
+    if(flag == 1) temp_tags = temp_tags.concat(new_tags[i]);
+  }
+return temp_tags;
+}
+function DelElemById(id){
+var elem = document.getElementById(id);
+if(elem!=null) elem.parentNode.removeChild(elem);
+}
+function SendMsgWithId(msg,id){
+DelElemById(id);
+var inner = document.getElementById("list_tags").innerHTML;
+document.getElementById("list_tags").innerHTML = "<label style=\"color:#ff0000\" id=\""+id+"\">" +"error: "+ msg + "</label>"+ inner;
+}
+function AddTag(){
+var tag = document.getElementById("add_tag");
+var tag_count = document.getElementById("post_count");
+var post_tags = document.getElementById("post_tags");
+var tags = getTags(tag.value+","+tags_list);
+tag.value="";
+var new_tags = SetupNewTags(tags_list_arr,tags);
+var count_tags = new_tags.length;
+if(count_tags>0)
+{
+RenderTags(new_tags,tags_list_arr.length);
+post_tags.value = tags.join();
+tags_list = post_tags.value;
+tags_list_arr = getTags(tags_list);
+tag_count.value = tags.length;
+}
+}
+function RenderTags(tags,count){
+var inner1 = "<span id=\"";
+var inner2 = "\" class=\""+tag_class+"\">";
+var inner3 = "<a class=\""+del_class+"\" title=\"Удалить метку\" onclick=\"RemoveTag('";
+var inner4 = "');\"></a></span>";
+var inner = document.getElementById("list_tags").innerHTML;
+for(var i=count;i<tags.length+count;i++)
+  inner = inner+" "+ inner1+tags[i-count]+inner2+tags[i-count]+" "+inner3+tags[i-count]+inner4;
+document.getElementById("list_tags").innerHTML = inner;
+}
+function RemoveTag(name_elem){
+DelElemById(name_elem);
+var temp = [];
+var post_tags = document.getElementById("post_tags");
+var tag_count = document.getElementById("post_count");
+post_tags.value = SetupNewTags(temp.concat(name_elem),tags_list_arr).join();
+tag_count.value--;
+tags_list=post_tags.value;
+tags_list_arr=getTags(tags_list);
+}
+</script>

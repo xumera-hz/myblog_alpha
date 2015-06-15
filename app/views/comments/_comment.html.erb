@@ -1,0 +1,13 @@
+<p>
+  <strong>Слуга Твой:</strong>
+  <%= comment.commenter %>
+</p>
+ 
+<p>
+  <strong>Пожелания:</strong>
+  <%= comment.body %>
+</p>
+ 
+<p>
+  <%= link_to 'Убрать это', [comment.article, comment], :class => "btn btn-danger btn-sm", method: :delete, data: { confirm: 'Вы уверены?' } %>
+</p>

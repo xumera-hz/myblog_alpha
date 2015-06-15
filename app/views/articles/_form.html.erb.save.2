@@ -1,0 +1,48 @@
+tt,bb,yy<%= form_for @article do |f| %>
+ 
+  <% if @article.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@article.errors.count, "error") %> в твоем безупречном плане:
+      </h2>
+      <ul>
+        <% @article.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+ 
+  <p>
+  <table>
+  <tbody>
+   <td><%= f.label :Идея, :style => 'width: 45px' %></td>
+   <td><%= f.text_field :title, :style => 'width: 600px' %></td>
+  </tbody>
+</table> 
+ </p>
+  <p>
+    <%= f.label :Инструкции %><br>
+    <%= f.text_area :text, :rows => '15', :cols => '90', :style => 'resize: none' %>
+  </p>
+ <%= fields_for :tag do |f2| %>
+  <p>
+    <%= f2.label :Метки %>
+    <%= f2.text_field :name, :id => 'add_tag' %>
+    <a class='btn btn-defaults' onclick='AddTag()'>Добавить</a>
+  </p>
+  <% end %>
+  <p>
+    <%= f.submit 'Утвердить', :class => 'btn btn-success btn-lg', :style => 'width: 600px, height: 45px' %>
+  </p>
+ 
+<% end %>
+<script>
+function AddTag(){
+var tag = document.getElementById('add_tag');
+var text = tag.text;
+var mass = text.split(',');
+alert(mass);
+
+}
+</script>

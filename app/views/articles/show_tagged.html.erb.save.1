@@ -1,0 +1,10 @@
+<div class="container">
+<h1>Блог Саурона</h1>
+<%= link_to 'Новый план захвата мира', new_article_path, :class => "btn btn-primary btn-lg" %>
+<%= link_to 'Метки', alltags_path, :class => "btn btn-primary btn-lg" %>
+<br><br>
+<%= @art[0].name %><br>
+<%= @agg.name %>
+
+</div>
+

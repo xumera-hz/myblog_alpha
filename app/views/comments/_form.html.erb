@@ -1,0 +1,13 @@
+<%= form_for([@article, @article.comments.build]) do |f| %>
+  <p>
+    <%= f.label 'Имя Твое' %><br>
+    <%= f.text_field :commenter %>
+  </p>
+  <p>
+    <%= f.label :'Излагай' %><br>
+    <%= f.text_area :body, :style => 'resize: none' %>
+  </p>
+  <p>
+    <%= f.submit  %>
+  </p>
+<% end %>
